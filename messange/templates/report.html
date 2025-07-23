@@ -1,0 +1,60 @@
+<!-- templates/report.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SMS Delivery Reports</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #0d9488;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    tr:hover {
+      background-color: #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>SMS Delivery Reports</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Message ID</th>
+        <th>Receiver</th>
+        <th>Sender</th>
+        <th>Status</th>
+        <th>Channel</th>
+        <th>Cost</th>
+        <th>Sent At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for msg in messages %}
+      <tr>
+        <td>{{ msg.message_id }}</td>
+        <td>{{ msg.receiver }}</td>
+        <td>{{ msg.sender }}</td>
+        <td>{{ msg.get_status_display }}</td>
+        <td>{{ msg.channel }}</td>
+        <td>{{ msg.cost }}</td>
+        <td>{{ msg.sent_at }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

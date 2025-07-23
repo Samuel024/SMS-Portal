@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arewalite SMS Portal</title>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f9fbfc, #e8f5f0);
+      color: #111827;
+      line-height: 1.6;
+      padding: 2rem;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), transparent 60%);
+      transform: rotate(25deg);
+      z-index: 0;
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #0d9488;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .virtual-accounts {
+      background: linear-gradient(to right, #a7f3d0, #d1fae5);
+      border: 1px solid #a7f3d0;
+      padding: 1.25rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bank-account {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed #0d948844;
+    }
+
+    .bank-account:last-child {
+      border-bottom: none;
+    }
+
+    .bank-name {
+      font-weight: 600;
+      color: #065f46;
+    }
+
+    .account-number {
+      font-family: monospace;
+      color: #047857;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .balance-section {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .balance-card {
+      background: #f0fdf4;
+      border: 1px solid #a7f3d0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    }
+
+    .balance-card:hover {
+      transform: scale(1.02);
+    }
+
+    .balance-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #065f46;
+    }
+
+    .balance-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0d9488;
+      margin-top: 0.3rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      resize: vertical;
+    }
+
+    textarea {
+      min-height: 100px;
+      line-height: 1.5;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #0d9488;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    small {
+      font-size: 0.85rem;
+      color: #4b5563;
+      display: block;
+      margin-top: 0.3rem;
+    }
+
+    button {
+      background: linear-gradient(to right, #0d9488, #14b8a6);
+      color: white;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover:not(:disabled) {
+      background: linear-gradient(to right, #14b8a6, #0d9488);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      background: #a7f3d0;
+      cursor: not-allowed;
+    }
+
+    .status-message {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .success {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* Ripple Effect */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ripple span {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="inner">
+      <h1>Arewalite SMS Portal</h1>
+
+      <!-- Virtual Accounts Section -->
+      <div class="virtual-accounts">
+        <h3>YOUR VIRTUAL ACCOUNTS</h3>
+        <div class="bank-account">
+          <div class="bank-name">Sterling Bank</div>
+          <div class="account-number">9678394546</div>
+        </div>
+        <div class="bank-account">
+          <div class="bank-name">Wema Bank</div>
+          <div class="account-number">9160922272</div>
+        </div>
+      </div>
+
+      <!-- Balance Section -->
+      <div class="balance-section">
+        <button id="check-balance-btn" class="ripple" style="margin-bottom: 1rem;">🔄 Check Balance</button>
+        <div id="balance-display">
+          <div class="balance-card">
+            <div class="balance-title">Account Balance</div>
+            <div class="balance-value" id="balance-value">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMS Form -->
+      <form id="smsForm" method="post" action="{% url 'messange:messange' %}">
+        {% csrf_token %}
+        <label for="mode">Send Mode:</label>
+        <select id="mode" name="mode" onchange="updateFormAction()">
+          <option value="single">Single</option>
+          <option value="bulk">Bulk</option>
+        </select>
+
+          <!-- NEW: Sender Dropdown -->
+  <label for="from">Sender:</label>
+  <select id="from" name="from">
+    <option value="Arewalite">Arewalite</option>
+    <option value="N-Alert">N-Alert</option>
+  </select>
+
+
+        <label for="to">To:</label>
+        <textarea id="to" name="to" required>{{ to }}</textarea>
+        <small>For bulk, separate numbers with commas</small>
+
+     
+
+        <label for="sms">Message:</label>
+        <textarea id="sms" name="sms" rows="5" required>{{ sms }}</textarea>
+
+        <button type="submit" id="send-btn" disabled>Send Message</button>
+      </form>
+
+      <!-- Error or Success Message -->
+      {% if response %}
+        <div class="status-message success"><strong>✅ Success:</strong> {{ response }}</div>
+      {% endif %}
+
+      {% if error %}
+        <div class="status-message error"><strong>❌ Error:</strong> {{ error }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    async function fetchBalance() {
+      const balanceValue = document.getElementById('balance-value');
+      const sendBtn = document.getElementById('send-btn');
+
+      try {
+        balanceValue.textContent = 'Loading...';
+
+        const response = await fetch("{% url 'messange:balance' %}", {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          },
+          credentials: 'same-origin'
+        });
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('Server returned invalid format (expected JSON)');
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
+
+        // Update UI
+        balanceValue.innerHTML = `${data.balance} ${data.currency}`;
+        sendBtn.disabled = !(parseFloat(data.balance) > 0);
+
+      } catch (error) {
+        console.error('Balance fetch error:', error);
+        balanceValue.innerHTML = `<span style="color:red;">Failed to load</span>`;
+        sendBtn.disabled = true;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchBalance(); // Initial balance check
+      setInterval(fetchBalance, 60000); // Auto-refresh every 60 seconds
+
+      // Manual Balance Click
+      document.getElementById("check-balance-btn").addEventListener("click", function (e) {
+        e.preventDefault();
+        rippleEffect(e);
+        fetchBalance();
+      });
+
+      // Handle form submission via AJAX
+     // Inside DOMContentLoaded
+document.getElementById("smsForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(async (response) => {
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+
+        // Try to parse JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await response.text();
+            console.error("Non-JSON response received:", text);
+            throw new Error("Expected JSON, but got HTML/text");
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success") {
+            alert("✅ " + data.message);
+            form.reset();
+        } else {
+            alert("❌ Failed to send message.");
+            console.error(data);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("⚠️ An error occurred while sending the message.");
+    });
+});
+
+      // Auto-grow textarea
+      const textarea = document.getElementById('to');
+      const autoGrow = (el) => {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+      };
+
+      textarea.addEventListener('input', () => autoGrow(textarea));
+      autoGrow(textarea);
+    });
+
+    function updateFormAction() {
+      var form = document.getElementById('smsForm');
+      var mode = document.getElementById('mode').value;
+      if (mode === 'bulk') {
+        form.action = "{% url 'messange:messange_bulk' %}";
+      } else {
+        form.action = "{% url 'messange:messange' %}";
+      }
+    }
+
+    function rippleEffect(e) {
+      const button = e.currentTarget;
+      const circle = document.createElement("span");
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - (button.offsetLeft + radius)}px`;
+      circle.style.top = `${e.clientY - (button.offsetTop + radius)}px`;
+      circle.classList.add("ripple-effect");
+
+      const rippleSpan = button.getElementsByTagName("span")[0];
+      if (rippleSpan) rippleSpan.remove();
+      button.appendChild(circle);
+    }
+  </script>
+</body>
+</html>
